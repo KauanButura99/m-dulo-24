@@ -2,29 +2,37 @@ name: EBAC CI
 
 on:
   push:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 jobs:
-  # This workflow contains a single job called "build"
-  test:
-    # The type of runner that the job will run on
+  RUN-SuperTest-API-Test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        node-version: [ 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
       with:
-        node-version: 20
-    - name: Cypress run
-      uses: cypress-io/github-action@v6
-      continue-on-error: true
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Installation of related packages
+      run: npm ci
+      
+    - name: RUN SuperTest API Testing
+      run: npm test
+      
+    - name: Archive SuperTest mochawesome test report
+      uses: actions/upload-artifact@v3
       with:
-        install-command: npm install
-        browser: chrome
-    - name: Publish Report
-      uses: peaceiris/actions-gh-pages@v3
+        name: SuperTest-mochawesome-test-report
+        path: Report
+    - name: Upload SuperTest mochawesome report to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: SuperTest-mochawesome-test-report
+        path: Report
