@@ -1,26 +1,26 @@
-name: Test ebac ci
+name: EBAC CI
 
 on:
   push:
-  pull_request:
-    branches: [ exececio-modulo26]
+    branches: [ exercicio-modulo26 ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 10.x
-          - 11.x
-          - 20.x
+
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-      - run: npm i
-      - run: npm test
-      - run: npm run cover
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install  
+
+      - name: Run Jest tests
+        run: npm test 
+
+      - name: Run SuperTest 
+        run: npm test:supertest  
