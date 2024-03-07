@@ -2,7 +2,7 @@ name: Test Pipeline
 
 on:
   push:
-    branches: [ exercicio-modulo26 ]  # Change `main` to your desired branch(es)
+    branches: [ main ]  # Change `main` to your desired branch(es)
 
 jobs:
   test:
