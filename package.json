@@ -16,5 +16,12 @@
     "jest": "^27.5.1",
     "jest-html-reporters": "^3.0.6",
     "supertest": "^6.2.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
   }
 }
