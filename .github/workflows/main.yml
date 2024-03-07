@@ -1,23 +1,26 @@
-name: Test Pipeline
+name: Test ebac ci
 
 on:
   push:
-    branches: [ main ]  # Change `main` to your desired branch(es)
+  pull_request:
+    branches: [ exececio-modulo26]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest  # You can customize the runner environment
-
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 10.x
+          - 11.x
+          - 20.x
     steps:
-      - uses: actions/checkout@v3  # Checks out the repository code
-
-      - name: Set up Node.js environment
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: 16  # Adjust the Node.js version as needed
-
-      - name: Install dependencies
-        run: npm install  # Or `yarn install` if using yarn
-
-      - name: Run tests
-        run: npm test  # Or `yarn test` if using yarn
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm i
+      - run: npm test
+      - run: npm run cover
