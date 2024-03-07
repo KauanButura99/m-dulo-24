@@ -4,9 +4,9 @@
   "description": "Testes de API com Supertest",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:healthCheck": "jest --testNamePattern=HealthCheck",
-    "test:e2e": "jest --testNamePattern=E2E",
+      "test:api": "jest",
+      "test:supertest": "supertest --reporter dot tests/api/*.spec.js",
+      "test": "npm run test:api && npm run test:supertest",
     "ci": "start-server-and-test start-server http://localhost:3000/workflow test"
   },
   "author": "KauanButura99",
