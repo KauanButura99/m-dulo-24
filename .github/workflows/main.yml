@@ -1,38 +1,23 @@
-name: EBAC CI
+name: Test Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ exercicio-modulo26 ]  # Change `main` to your desired branch(es)
+
 jobs:
-  RUN-SuperTest-API-Test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  test:
+    runs-on: ubuntu-latest  # You can customize the runner environment
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    - name: Installation of related packages
-      run: npm ci
-      
-    - name: RUN SuperTest API Testing
-      run: npm test
-      
-    - name: Archive SuperTest mochawesome test report
-      uses: actions/upload-artifact@v3
-      with:
-        name: SuperTest-mochawesome-test-report
-        path: Report
-    - name: Upload SuperTest mochawesome report to GitHub
-      uses: actions/upload-artifact@v3
-      with:
-        name: SuperTest-mochawesome-test-report
-        path: Report
+      - uses: actions/checkout@v3  # Checks out the repository code
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16  # Adjust the Node.js version as needed
+
+      - name: Install dependencies
+        run: npm install  # Or `yarn install` if using yarn
+
+      - name: Run tests
+        run: npm test  # Or `yarn test` if using yarn
